@@ -1,10 +1,16 @@
 const express = require("express")
 const app = express();
-const bodyParser = require("body-parser")
+//const bodyParser = require("body-parser")
+
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger_output.json')
 
 const feedRoutes = require("./routes/feedRoutes")
 
-app.use(bodyParser.json()); //application/json
+//app.use(bodyParser.json()); //application/json
+
+app.use(express.json())
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use((req,res,next)=> {
     res.setHeader('Access-Control-Allow-Origin', '*');
