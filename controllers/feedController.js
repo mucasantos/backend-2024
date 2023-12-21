@@ -10,6 +10,10 @@ exports.createPost = (req, res, next) => {
     
   //Criar post no Banco de Dados
 
+  if (!title || !content){
+    return res.status(400).json({ error: true, message: "Você precisa enviar o body correto!"})
+  }
+
   res.status(201).json({
     message: "Post criado com sucesso!",
     post: { id: new Date().toISOString(), title: title, content: content },
