@@ -1,12 +1,14 @@
-const express = require("express")
+const express = require("express");
 
 const router = express.Router();
 
-const feedController = require("../controllers/feedController")
+const feedController = require("../controllers/feedController");
+const { validTitle, validContent } = require("../service/validators");
 
-router.get('/posts', feedController.getPosts);
-router.post('/post', feedController.createPost)
-router.delete('/post/:id', feedController.createPost)
-router.patch('/post/:id', feedController.createPost)
+// GET /feed/posts
+router.get("/posts", feedController.getPosts);
+
+// POST /feed/post
+router.post("/post", [validTitle, validContent], feedController.createPost);
 
 module.exports = router;
