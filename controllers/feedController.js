@@ -5,10 +5,12 @@ exports.createPost = (req, res, next) => {
   const erros = validationResult(req);
 
   if (!erros.isEmpty()) {
-    return res.status(422).json({
-      message: "Verificação falhou! Algum dado está incorreto.",
-      erros: erros.array(),
-    });
+    //Criar um objeto do tipo Error
+    const error = new Error("Verificação falhou! Algum dado está incorreto.");
+    //Criar minha propriedade (o nome sou eu que escolho! - pode ser qualquer 1)
+    error.statusCode = 422;
+    //Lançar (throw) o erro
+    throw error;
   }
 
   const title = req.body.title;
@@ -33,7 +35,12 @@ exports.createPost = (req, res, next) => {
         post: result,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
 
 exports.getPosts = (req, res, next) => {
