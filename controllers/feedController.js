@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const Post = require("../models/post");
 const fs = require("fs");
 const path = require("path");
+const { count } = require("console");
 
 exports.createPost = (req, res, next) => {
   const erros = validationResult(req);
@@ -53,10 +54,23 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.getPosts = (req, res, next) => {
+  //Pagination (simple form)
+  const currentPage = req.query.page || 1;
+  const perPage = 2;
+  let totalItems;
+
   Post.find()
+    .countDocuments()
+    .then((count) => {
+      totalItems = count;
+      return Post.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
     .then((posts) => {
       res.status(200).json({
         posts: posts,
+        totalItems: totalItems
       });
     })
     .catch((err) => {
