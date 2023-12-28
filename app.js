@@ -2,12 +2,22 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const multer = require("multer");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger_output.json");
 const feedRoutes = require("./routes/feedRoutes");
 
+const uploadFiles = require("./service/uploadFiles");
+
 app.use(express.json());
+app.use(
+  multer({
+    storage: uploadFiles.fileStorage,
+    fileFilter: uploadFiles.fileFiltes,
+  }).single("image")
+);
+
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
