@@ -11,4 +11,8 @@ router.get("/posts", feedController.getPosts);
 // POST /feed/post
 router.post("/post", [validTitle, validContent], feedController.createPost);
 
+//único post
+router.get("/post/:postID", feedController.getPost)
+
+
 module.exports = router;

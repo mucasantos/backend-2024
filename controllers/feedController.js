@@ -44,7 +44,36 @@ exports.createPost = (req, res, next) => {
 };
 
 exports.getPosts = (req, res, next) => {
-  res.status(200).json({
-    posts: [{ title: "Primeiro Post", content: "Este é o primeiro post!" }],
-  });
+  Post.find()
+    .then((posts) => {
+      res.status(200).json({
+        posts: posts,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+exports.getPost = (req, res, next) => {
+  const postID = req.params.postID;
+
+  Post.findById(postID)
+    .then((post) => {
+      if (!post) {
+        const error = new Error("Post não encontrado...");
+        error.statusCode = 404;
+        throw error;
+      }
+      res.status(200).json({ post: post });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
 };
