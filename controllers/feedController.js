@@ -55,7 +55,7 @@ exports.createPost = (req, res, next) => {
 exports.getPosts = (req, res, next) => {
   //Pagination (simple form)
   const currentPage = req.query.page || 1;
-  const perPage = 2;
+  const perPage =  req.query.perPage || 2;
   let totalItems;
 
   Post.find()
