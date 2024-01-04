@@ -2,7 +2,6 @@ const { validationResult } = require("express-validator");
 const Post = require("../models/post");
 const fs = require("fs");
 const path = require("path");
-const { count } = require("console");
 
 exports.createPost = (req, res, next) => {
   const erros = validationResult(req);
